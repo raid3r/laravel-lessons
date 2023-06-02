@@ -22,7 +22,17 @@
             }).on("liqpay.callback", function (data) {
                 console.log(data.status);
                 console.log(data);
-                //TODO fetch post to payment-result transaction data
+
+                fetch('{{route('pay-result')}}', {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        _token: "{{csrf_token()}}",
+                        transaction: data
+                    })
+                })
 
 
             }).on("liqpay.ready", function (data) {

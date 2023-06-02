@@ -30,6 +30,7 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::get('/pay', [\App\Http\Controllers\PayController::class, 'index'])->name('pay');
+Route::post('/pay-result', [\App\Http\Controllers\PayController::class, 'paymentResult'])->name('pay-result');
 
 Route::get('/poll/{poll}/vote', [\App\Http\Controllers\PollController::class, 'vote'])->name('poll-vote');
 Route::post('/poll/{poll}/store-vote', [\App\Http\Controllers\PollController::class, 'store'])->name('poll-vote-store');
