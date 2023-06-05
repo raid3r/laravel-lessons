@@ -27,6 +27,9 @@
                     <x-nav-link :href="route('poll.index')" :active="request()->routeIs('poll.index')">
                         {{ __('Polls') }}
                     </x-nav-link>
+                    <x-nav-link :href="route('admin.donate.index')" :active="request()->routeIs('admin.donate.index')">
+                        {{ __('Donates') }}
+                    </x-nav-link>
                     <x-nav-link :href="route('admin.map.index')" :active="request()->routeIs('admin.map.index')">
                         {{ __('Markers') }}
                     </x-nav-link>
