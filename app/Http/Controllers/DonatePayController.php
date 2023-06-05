@@ -2,21 +2,44 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DonatePayment;
 use App\Models\LiqPayService;
+use App\Models\Donate;
 use App\Models\Payment;
 use Illuminate\Http\JsonResponse;
+use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Request;
 
-class PayController extends Controller
+class DonatePayController extends Controller
 {
 
-    public function index(LiqPayService $service)
+    public function index(Donate $donate)
     {
-        return view('pages.pay.index', [
-            'data' => $service->getFormData(
-                $service
-                    ->generatePayParams(9, 9999.95, "Some product")
-            ),
+        return view('pages.donate.index', [
+            'model' => $donate,
+        ]);
+    }
+
+    public function donateForm(Donate $donate, float $amount, LiqPayService $service): View
+    {
+        $donatePayment            = new DonatePayment();
+        $donatePayment->status    = DonatePayment::STATUS_PENDING;
+        $donatePayment->donate_id = $donate->id;
+        $donatePayment->amount    = $amount;
+        $donatePayment->uid       = uniqid();
+        $donatePayment->save();
+
+        $data = $service->getFormData(
+            $service->generatePayParams(
+                $donatePayment->uid,
+                $amount,
+                $donate->title
+            )
+        );
+
+        return view('pages.donate.form', [
+            'model' => $donate,
+            'data' => $data,
         ]);
     }
 
@@ -42,6 +65,14 @@ class PayController extends Controller
     public function paymentResult(Request $request): JsonResponse
     {
         $payment = $this->fillPayment($request);
+        $payment->save();
+
+        /**
+         * @var $donatePayment DonatePayment
+         */
+        $donatePayment = DonatePayment::query()->where('uid', '=', $payment->order_id)->first();
+        $donatePayment->status = DonatePayment::STATUS_SUCCESS;
+        $donatePayment->save();
 
         /**
          * {
