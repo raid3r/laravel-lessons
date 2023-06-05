@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\DonateController;
 use App\Http\Controllers\Admin\PollController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
@@ -28,6 +29,12 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+
+Route::prefix('/donate')->as('donate.')->group(function () {
+    Route::get('/{donate}', [\App\Http\Controllers\DonatePayController::class, 'index'])->name('index');
+    Route::get('/{donate?}/pay/{amount?}', [\App\Http\Controllers\DonatePayController::class, 'donateForm'])->name('form');
+    Route::post('/pay-result', [\App\Http\Controllers\DonatePayController::class, 'paymentResult'])->name('pay-result');
+});
 
 Route::get('/pay', [\App\Http\Controllers\PayController::class, 'index'])->name('pay');
 Route::post('/pay-result', [\App\Http\Controllers\PayController::class, 'paymentResult'])->name('pay-result');
@@ -98,6 +105,23 @@ Route::middleware('auth')->group(function () {
              ->name('destroy-variant');
         Route::post('/variant-store/{poll}', [PollController::class, 'storeVariant'])
              ->name('store-variant');
+    });
+
+    Route::prefix('admin/donate')->as('admin.donate.')->group(function () {
+        Route::get('/', [DonateController::class, 'index'])
+             ->name('index');
+        Route::get('/{donate}/show', [DonateController::class, 'show'])
+             ->name('show');
+        Route::get('/create', [DonateController::class, 'create'])
+             ->name('create');
+        Route::post('/store', [DonateController::class, 'store'])
+             ->name('store');
+        Route::get('/{donate}/edit', [DonateController::class, 'edit'])
+             ->name('edit');
+        Route::post('/{donate}/update', [DonateController::class, 'update'])
+             ->name('update');
+        Route::post('/donate/{donate}', [DonateController::class, 'destroy'])
+             ->name('destroy');
     });
 });
 
