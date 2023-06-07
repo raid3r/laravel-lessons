@@ -13,8 +13,9 @@ class DonateRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title'       => 'required|max:200',
-            'description' => 'required|max:500',
+            'title'         => 'required|max:200',
+            'description'   => 'required|max:500',
+            'target_amount' => 'numeric',
         ];
     }
 }

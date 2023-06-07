@@ -24,6 +24,10 @@ use App\Models\Donate;
                         <p class="card-text">
                             {{$model->description}}
                         </p>
+                        <div style="display: flex; align-items: center" class="my-5">
+                            @include('partials.progress', ['value' => $model->donePercent()])
+                        </div>
+
                         <div class="mt-5">
                             <a class="btn btn-primary" href="{{route('donate.form', [$model, 100])}}">100 UAH</a>
                             <a class="btn btn-primary" href="{{route('donate.form', [$model, 200])}}">200 UAH</a>

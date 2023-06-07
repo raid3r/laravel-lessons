@@ -22,6 +22,9 @@ use App\Models\Donate;
                     <p class="card-text">
                         {{$model->description}}
                     </p>
+                    <div style="display: flex; align-items: center">
+                        @include('partials.progress', ['value' => $model->donePercent()])
+                    </div>
                 </div>
                 <div class="card-footer">
                     <a class="btn btn-primary" href="{{route('admin.donate.index')}}">Return</a>

@@ -24,6 +24,15 @@
                                       class="form-control" placeholder="Description"></textarea>
 
                         </div>
+                        <div class="mb-3">
+                            <label for="target_amount" class="form-label">
+                                Target amount
+                            </label>
+                            <input type="number"
+                                   id="target_amount" name="target_amount"
+                                   placeholder="Target amount">
+
+                        </div>
 
                         <button type="submit" class="btn btn-outline-primary">Save</button>
 

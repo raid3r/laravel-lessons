@@ -26,6 +26,7 @@ use App\Models\Donate;
                     <th>Id</th>
                     <th>Title</th>
                     <th>Description</th>
+                    <th style="width: 30%"></th>
                     <th></th>
                 </tr>
                 </thead>
@@ -35,6 +36,11 @@ use App\Models\Donate;
                         <td>{{$model->id}}</td>
                         <td>{{$model->title}}</td>
                         <td>{{$model->description}}</td>
+                        <td>
+                            <div style="display: flex; align-items: center">
+                                @include('partials.progress', ['value' => $model->donePercent()])
+                            </div>
+                        </td>
                         <td>
                             <a href="{{route('donate.index', [$model])}}"
                                class="btn btn-sm btn-outline-danger">

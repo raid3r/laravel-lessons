@@ -1,7 +1,8 @@
 <?php
 /**
- * @var \App\Models\Poll $model
+ * @var \App\Models\Donate $model
  */
+
 ?>
 
 @extends('layouts.main')
@@ -13,7 +14,8 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <form method="POST" action="{{route('admin.donate.update', [$model])}}" enctype="multipart/form-data">
+                    <form method="POST" action="{{route('admin.donate.update', [$model])}}"
+                          enctype="multipart/form-data">
                         @csrf
                         <div class="mb-3">
                             <label for="title" class="form-label">
@@ -28,6 +30,16 @@
                             </label>
                             <textarea id="description" rows="5" name="description"
                                       class="form-control" placeholder="Description">{{$model->description}}</textarea>
+
+                        </div>
+                        <div class="mb-3">
+                            <label for="target_amount" class="form-label">
+                                Target amount
+                            </label>
+                            <input type="number"
+                                   id="target_amount" name="target_amount"
+                                   value="{{$model->target_amount}}"
+                                   placeholder="Target amount">
 
                         </div>
 
