@@ -15,7 +15,7 @@ use App\Models\Donate;
         <div class="col-md-4">
             <div class="card">
                 <div class="card-header">
-                    Total: {{$model->donate_payments()->where('status', '=', \App\Models\DonatePayment::STATUS_SUCCESS)->sum('amount')}}
+                    Total: {{$model->successPayments()->sum('amount')}}
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">{{$model->title}}</h5>
@@ -40,7 +40,7 @@ use App\Models\Donate;
 
                     <table class="table table-hover">
                         <tbody>
-                        @foreach($model->donate_payments()->where('status', '=', \App\Models\DonatePayment::STATUS_SUCCESS)->get() as $payment )
+                        @foreach($model->successPayments() as $payment )
                               <tr>
                                   <td>{{$payment->id}}</td>
                                   <td>{{$payment->status}}</td>

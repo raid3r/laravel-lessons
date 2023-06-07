@@ -7,6 +7,7 @@ use App\Models\LiqPayService;
 use App\Models\Donate;
 use App\Models\Payment;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -64,15 +65,18 @@ class DonatePayController extends Controller
 
     public function paymentResult(Request $request): JsonResponse
     {
-        $payment = $this->fillPayment($request);
-        $payment->save();
+        DB::transaction(function () use ($request) {
+            $payment = $this->fillPayment($request);
+            $payment->save();
 
-        /**
-         * @var $donatePayment DonatePayment
-         */
-        $donatePayment = DonatePayment::query()->where('uid', '=', $payment->order_id)->first();
-        $donatePayment->status = DonatePayment::STATUS_SUCCESS;
-        $donatePayment->save();
+            /**
+             * @var $donatePayment DonatePayment
+             */
+            $donatePayment = DonatePayment::query()->where('uid', '=', $payment->order_id)->first();
+            $donatePayment->status = DonatePayment::STATUS_SUCCESS;
+            $donatePayment->save();
+        });
+
 
         /**
          * {

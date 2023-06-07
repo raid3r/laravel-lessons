@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Query\Builder;
 
 /**
  * @property int    $id
@@ -48,14 +49,20 @@ class Donate extends Model
         return $this->hasMany(DonatePayment::class, 'donate_id', 'id');
     }
 
+    public function successPayments(): Builder
+    {
+        return $this->donate_payments()
+                    ->where('status', '=', DonatePayment::STATUS_SUCCESS);
+    }
+
     public function donePercent(): int
     {
-        $collected = $this->donate_payments()
-                          ->where('status', '=', DonatePayment::STATUS_SUCCESS)
-                          ->sum('amount');
         if ($this->target_amount == 0) {
             return 100;
         }
+
+        $collected = $this->successPayments()
+                          ->sum('amount');
 
         return intval($collected / $this->target_amount * 100);
     }
